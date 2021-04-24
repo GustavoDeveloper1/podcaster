@@ -1,21 +1,38 @@
 import format from 'date-fns/format';
 import ptBR from 'date-fns/locale/pt-BR';
-
+import { useContext } from 'react';
+import { PlayerContext } from '../../Contexts/PlayerContext';
+import Image from 'next/image';
 
 import Styles from './styles.module.scss';
 
 export function Player() {
 
+    const { episodeList, currentEpisodeIndex } = useContext(PlayerContext);
+
+    const episode = episodeList[currentEpisodeIndex]
+
     return (
         <div className={Styles.playerContainer}>
             <header>
                 <img src="/playing.svg" alt="Tocando agora" />
-                <strong>Tocando Agora</strong>
+                <strong>Tocando Agora </strong>
             </header>
 
-            <div className={Styles.emptyPlayer}>
-                <strong>Selecione um podcast para ouvir</strong>
-            </div>
+
+            { episode ? (
+                <div className={Styles.currentEpisode}>
+                    <Image width={592} height={592} src={episode.thumbnail} objectFit="cover"/>
+                    <strong>{episode.title}</strong>
+                    <span>{episode.members}</span>
+                </div>
+            ) : (
+                <div className={Styles.emptyPlayer}>
+                    <strong>Selecione um podcast para ouvir</strong>
+                </div>
+            )}
+
+
 
             <footer className={Styles.empty}>
                 <div className={Styles.progress}>
@@ -33,7 +50,7 @@ export function Player() {
                         <img src="/play-previous.svg" alt="Tocar Anterior" />
                     </button>
                     <button type="button" className={Styles.playerButton}>
-                        <img src="/play.svg" alt="Tocar"/>
+                        <img src="/play.svg" alt="Tocar" />
                     </button>
                     <button type="button" >
                         <img src="/play-next.svg" alt="Repetir" />
